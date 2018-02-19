@@ -4,6 +4,7 @@ six==1.11.0
 Flask==0.11.1
 Flask-Cors==1.8.0
 Pillow==2.6.1
+tinys3==0.1.11
 h5py==2.7.1
 keras==2.1.3
 numpy>=1.11

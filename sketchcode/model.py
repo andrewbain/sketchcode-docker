@@ -15,6 +15,7 @@ from keras.layers import Dropout
 from keras.layers import Flatten
 from keras.layers.convolutional import Conv2D
 from keras.layers.convolutional import MaxPooling2D
+
 import numpy as np
 from config import Config
 
@@ -212,8 +213,8 @@ class SketchModel(object):
         image = self.process_image_for_custom(image_path)
         image = image.reshape(1, 200, 200, 1).astype('float32')
         image = image / 255
-        model = load_model('custom-model-latest.h5')
-        yhat = model.predict_classes(image)
+        
+        yhat = self.config.model.predict_classes(image)
         markup = self.get_markup(yhat[0])
         return markup
 
@@ -265,7 +266,7 @@ class SketchModel(object):
         h = model.fit_generator(aug.flow(self.trainX, self.trainY, batch_size=32), validation_data=(self.testX, self.testY), steps_per_epoch=len(self.trainX) // 32, epochs=self.NB_EPOCHS)
         # Final evaluation of the model
         scores = model.evaluate(self.testX, self.testY, verbose=0)
-        model.save('custom-model-latest.h5')
+        model.save('./models/custom-model-latest.h5')
         # self.plot_training(h)
         print("Large CNN Error: %.2f%%" % (100 - scores[1] * 100))
 

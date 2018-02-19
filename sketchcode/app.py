@@ -9,13 +9,15 @@ from io import BytesIO
 import base64
 import re
 import time
+import tinys3
 from model import SketchModel
 from config import Config
 
 # define the app
 app = Flask(__name__)
-CORS(app, resources={r"/api": {"origins": "*"}}) # needed for cross-domain requests, allow everything by default
 app.config['CORS_HEADERS'] = 'Content-Type'
+CORS(app, resources=r'/*', allow_headers=['Origin', 'Content-Type', 'Accept', 'Authorization', 'X-Request-With'], supports_credentials=True) # needed for cross-domain requests, allow everything by default
+
 
 
 
@@ -35,9 +37,8 @@ def api():
     image_data = re.sub('^data:image/.+;base64,', '', data['image'])
     image_data = base64.b64decode(image_data)
     image = Image.open(BytesIO(image_data))
-    path = os.path.dirname(sys.argv[0]) + '/images/temp_folder/' + 'input_{}.jpg'.format(int(time.time()))
+    path = './images/temp_folder/input_{}.jpg'.format(int(time.time()))
     image.save(path)
-
 
     prediction = model.predict(path)
     return json.dumps(prediction)
@@ -45,7 +46,7 @@ def api():
 
 @app.route('/')
 def index():
-    return "Sketchcode index"
+    return "Sketchcode index g"
 
 # HTTP Errors handlers
 @app.errorhandler(404)
@@ -62,7 +63,3 @@ def server_error(e):
     See logs for full stacktrace.
     """.format(e), 500
 
-
-if __name__ == '__main__':
-    # This is used when running locally.
-    app.run(host='0.0.0.0')
