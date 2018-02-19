@@ -6,8 +6,6 @@ services:
     container_name: sketchcode
     restart: always
     build: ./sketchcode
-    volumes:
-      - ~/documents/ani_dev/sketchcode/sketchcode_docker/sketchcode:/home/project/sketchcode
     ports:
       - "8000:8000"
     command: gunicorn -w 1 -b 0.0.0.0:8000 app:app
